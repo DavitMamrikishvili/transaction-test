@@ -10,7 +10,6 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 class Context(
     val configuration: Settings,
-
     val jacksonMapper: ObjectMapper = jacksonObjectMapper()
         .enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY)
         .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
