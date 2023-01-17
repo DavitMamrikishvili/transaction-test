@@ -9,7 +9,6 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 class Context(
-//    val dataProviderService: DataProviderService,
     val configuration: Settings,
 
     val jacksonMapper: ObjectMapper = jacksonObjectMapper()
