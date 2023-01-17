@@ -10,29 +10,23 @@ import com.exactpro.th2.cache.common.event.Event
 import mu.KotlinLogging
 import kotlin.system.measureTimeMillis
 
-private val logger = KotlinLogging.logger {}
-
 class ArangoDBService(appCtx: Context) {
     private val config = appCtx.configuration
     private val arango: Arango = Arango(config.arangoCredentials)
     private val db = arango.getDatabase()
     private val events = (1..200_000).map {
-        Event("$it",  "", "","", "", false, "name", "type", 123120, 12312, "", true, setOf(),
+        Event("862a3cb7-79f7-4f33-93ee-8797bee7e439:3fad95f4-3881-11ec-8760-$it",  "book", "scope","862a3cb7-79f7-4f33-93ee", "862a3cb7-79f7-4f33-93ee-8797bee7e439", false, "name", "type", 1751358236167872, 1751358236167879, "862a3cb7-79f7-4f33-93ee-8797bee7e439:3fad47d2-3881-11ec-8760-e55c32c0bc13", true, setOf(),
         "xwewsecchmtibgnkiwdfutitniyjltabnpawbkxpuebicuprioefuglxxkrtwjhxgvtadqmpfnxtvegevcyerixjqntqntqqahlytxuaavtinoajlqrejzcvqoswytprimcepebqrbjpabrxqzbwwzlojvlmztexeijyujwkmixqeleyaqniortbwdgfxecpvaqbndajcrjyhrazyojjployqybhrtghimiimpqpplrsmufxicnvfnpanlpntxilchfrezgeqtwqgfisrnxpatjsmvizwrayeapifnabvvejeuqspoifnvmlscapuxzdpccwueptarinrkwnpfgcpxsjhbxkmrvlarepjentaozfdzhjadojdukyphraugginbpqnnwlxooozyxokvnowaoicangcuegvgngiwvzaudlhayxkhzcwcdqdonfmcgsnzmwfcexjdxgzeaxhzeyxlzmykxrqoanwakgpikgazbpcwmjpojgkghmyhawcdlnmxpesokjztkmlmwtqjnmtwtvftelkjyibanawzkyqdevfaayloingxkamjrptnkqdrfepxqcxmudqfdxekjmpcxidnlvkfpxgxolwrhetilmrcpxmngbnhewarsijkseyfzbryfpbnzpyctobzczefxibezcemglpzqitcfgrwawjovikpdlkqgzzaheapurhxygujfxhylomqeheircdqgzyugurmnsdhqrrgaxghtecweklnapjkyqrhtrplepqgjvxzogapcbsmsloqcgsvdjwngdlvnmbpmnqaxzxvyfluyjqorrkfsxmoqstkxloofrwwkexovaktsfrhbhidhuqzmqikbatbunrzlmwmvjtiyyjotacaspmbnnzkdzipuhrptftzcusrekocpjzsabsefdeuimjnaegbtdrecpsktbaylfcogukhwinwrrooijctgucozbzdqtwnjuokdbpxndnunqbbcwfgaj")
     }.toList()
 
     fun transaction() {
         val tx = db.beginStreamTransaction(StreamTransactionOptions().writeCollections(EVENT_COLLECTION, EVENT_EDGES))
         val options = DocumentCreateOptions().streamTransactionId(tx.id)
-        val a = measureTimeMillis {
-            db.collection(EVENT_COLLECTION).insertDocuments(events.subList(1, 100_001), options)
-            db.commitStreamTransaction(tx.id)
-        }
-        logger.info { "Transaction took $a ms" }
+        db.collection(EVENT_COLLECTION).insertDocuments(events.subList(1, 100_001), options)
+        db.commitStreamTransaction(tx.id)
     }
 
     fun f() {
-        val a = measureTimeMillis { db.collection(EVENT_COLLECTION).insertDocuments(events.subList(100_001, 200_001)) }
-        logger.info { "insertDocuments() took $a ms" }
+        db.collection(EVENT_COLLECTION).insertDocuments(events.subList(100_001, 200_001))
     }
 }
